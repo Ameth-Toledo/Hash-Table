@@ -30,13 +30,31 @@ public class HashTable<K, V> {
     public void put(K key, V value, boolean useSquaredHashCode) {
         int bucketIndex = useSquaredHashCode ? squaredHashCode(key) : multipliedHashCode(key);
         for (HashNode<K, V> node : bucketArray[bucketIndex]) {
-            if (node.key.equals(key)) {
-                node.value = value;
+            if (node.getKey().equals(key)) {
+                node.setValue(value);
                 return;
             }
         }
         bucketArray[bucketIndex].add(new HashNode<>(key, value));
         size++;
+    }
+
+    public V get(K key) {
+        int bucketIndex = squaredHashCode(key);
+        for (HashNode<K, V> node : bucketArray[bucketIndex]) {
+            if (node.getKey().equals(key)) {
+                return node.getValue();
+            }
+        }
+        return null;
+    }
+
+    public int numBuckets() {
+        return numBuckets;
+    }
+
+    public LinkedList<HashNode<K, V>>[] getBucketArray() {
+        return bucketArray;
     }
 
     public int size() {
